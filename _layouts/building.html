@@ -1,0 +1,79 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/do/{{ page.doShort | uri_escape }}/">{{ page.doShort }}</a>
+    <span>›</span>
+    <a href="/sg/{{ page.doShort | uri_escape }}/{{ page.sigungu | uri_escape }}/">{{ page.sigungu }}</a>
+    <span>›</span>
+    {% if page.dongUrl %}<a href="{{ page.dongUrl }}">{{ page.dong }}</a>{% else %}<span>{{ page.dong }}</span>{% endif %}
+    <span>›</span>
+    <span>{{ page.bName }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏢 {{ page.bName }} 입점 업체</h1>
+    <p>{{ page.place }}{% if page.road != "" %} · {{ page.road }}{% endif %} · 점포 {{ page.n }}곳 · {{ page.period }} 기준</p>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="info-box">
+    ℹ️ 소상공인시장진흥공단 상가업소 자료({{ page.period }})에서 이 건물 이름으로 등록된 점포입니다. 조사 이후 개업·폐업·이전은 반영되지 않을 수 있으니 방문 전 영업 여부를 확인하세요.
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <h2 class="group-title">📊 업종 구성</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>업종 대분류</th><th>점포</th><th>비중</th><th style="width:34%;">비교</th></tr></thead>
+    <tbody>{% for r in page.bigRows %}<tr><td>{{ r.name }}</td><td>{{ r.n }}곳</td><td>{{ r.share }}</td><td><div class="bar"><span style="width:{{ r.w }}%"></span></div></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+  <h2 class="group-title">🏬 층별 입점 업체 <small style="font-weight:500;color:#6B7280;">({{ page.shown }}곳 표시{% if page.more > 0 %}, 외 {{ page.more }}곳{% endif %})</small></h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>층</th><th>상호</th><th>업종</th></tr></thead>
+    <tbody>{% for s in page.stores %}<tr><td>{{ s.floor }}</td><td>{{ s.name }}</td><td>{{ s.sml }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.smlRows.size > 0 %}
+  <div class="chip-row" style="margin-top:12px;">
+    <span style="color:#6B7280;font-size:.85rem;margin-right:4px;">주요 업종</span>
+    {% for r in page.smlRows %}<span class="chip">{{ r.name }}<em>{{ r.n }}</em></span>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if page.neighbors.size > 0 %}
+  <h2 class="group-title">🏢 {{ page.dong }}의 다른 입점 건물</h2>
+  <ul class="food-list">
+    {% for t in page.neighbors %}<li class="food-row"><div class="fr-main"><b>{% if t.url %}<a href="{{ t.url }}" style="color:inherit;">{{ t.name }}</a>{% else %}{{ t.name }}{% endif %}</b><small>점포 {{ t.n }}곳</small></div>{% if t.url %}<a class="fr-map" href="{{ t.url }}">보기</a>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% include faq.html %}
+
+  <div class="tip-box">
+    <h2>{{ page.bName }} 주변 정보</h2>
+    <p>{{ page.dong }}의 업종별 점포 수와 특화 업종은 동네 상권 페이지에서 볼 수 있습니다.</p>
+    <p class="hub-links" style="margin-top:10px;">{% if page.dongUrl %}<a href="{{ page.dongUrl }}">{{ page.dong }} 상권분석 →</a>{% endif %} <a href="/sg/{{ page.doShort | uri_escape }}/{{ page.sigungu | uri_escape }}/">{{ page.sigungu }} 상권 →</a> <a href="/biz/">업종별 보기 →</a></p>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

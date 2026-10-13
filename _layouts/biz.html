@@ -1,0 +1,67 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/biz/">업종</a>
+    <span>›</span>
+    <a href="{{ page.natUrl }}">{{ page.sml }}</a>
+    <span>›</span>
+    <span>{{ page.sigungu }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏷️ {{ page.place }} {{ page.sml }} 현황</h1>
+    <p>{{ page.big }} › {{ page.mid }} · 점포 {{ page.n }}곳 · {{ page.period }} 기준</p>
+  </div>
+
+  <div class="ratio-box">
+    <div class="ratio-num" style="font-size:1.8rem;min-width:130px;">{{ page.n }}<small>곳</small></div>
+    <div class="ratio-txt">
+      <b>{{ page.sigungu }} 점포의 {{ page.share }}</b>
+      시군구 내 업종 {{ page.rank }}위{% if page.ratio %} · 전국 평균 비중({{ page.natShare }})의 {{ page.ratio }}배{% endif %}
+    </div>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <h2 class="group-title">📍 {{ page.smlGa }} 많은 동네</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>동네</th><th>점포</th><th>업종 내 비중</th><th style="width:34%;">비교</th></tr></thead>
+    <tbody>{% for d in page.dongRows %}<tr><td>{% if d.url %}<a href="{{ d.url }}">{{ d.name }}</a>{% else %}{{ d.name }}{% endif %}</td><td>{{ d.n }}곳</td><td>{{ d.share }}</td><td><div class="bar"><span style="width:{{ d.w }}%"></span></div></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.others.size > 0 %}
+  <h2 class="group-title">📂 같은 업종군({{ page.mid }})</h2>
+  <ul class="food-list">
+    {% for o in page.others %}<li class="food-row"><div class="fr-main"><b>{% if o.url %}<a href="{{ o.url }}" style="color:inherit;">{{ o.name }}</a>{% else %}{{ o.name }}{% endif %}</b><small>{{ page.sigungu }} {{ o.n }}곳</small></div>{% if o.url %}<a class="fr-map" href="{{ o.url }}">보기</a>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% include faq.html %}
+
+  <div class="tip-box">
+    <h2>{{ page.sml }} 창업 전 확인하세요</h2>
+    <p>점포 수는 경쟁 강도의 참고 지표입니다. 같은 업종이 많은 동네가 곧 장사가 잘 되는 곳은 아니며, 임대료·유동인구·객단가는 이 자료에 포함되어 있지 않습니다.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="{{ page.sgUrl }}">{{ page.sigungu }} 상권 전체 →</a> <a href="{{ page.natUrl }}">전국 {{ page.sml }} →</a> <a href="/biz/">업종 목록 →</a></p>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

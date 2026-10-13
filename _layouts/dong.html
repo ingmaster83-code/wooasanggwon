@@ -1,0 +1,92 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/do/{{ page.doShort | uri_escape }}/">{{ page.doShort }}</a>
+    <span>›</span>
+    <a href="/sg/{{ page.doShort | uri_escape }}/{{ page.sigungu | uri_escape }}/">{{ page.sigungu }}</a>
+    <span>›</span>
+    <span>{{ page.dong }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏪 {{ page.place }} 상권분석</h1>
+    <p>점포 {{ page.n }}곳 · {{ page.sigungu }} {{ page.sgDongs }}개 동 중 {{ page.rank }}위 · {{ page.period }} 기준{% if page.adm.size > 0 %} · 행정동 {{ page.adm | join: ", " }}{% endif %}</p>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="info-box">
+    ℹ️ 소상공인시장진흥공단 상가업소 자료({{ page.period }})를 <b>법정동</b> 단위로 집계했습니다. 행정동과 경계가 다를 수 있고, 조사 이후 개업·폐업·이전은 반영되지 않을 수 있습니다.
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.special.size > 0 %}
+  <h2 class="group-title">⭐ 이 동네에 유독 많은 업종 <small style="font-weight:500;color:#6B7280;">({{ page.sigungu }} 평균 대비)</small></h2>
+  <div class="chip-row">
+    {% for s in page.special %}<span class="chip">{{ s.name }}<em>{{ s.n }}곳 · {{ s.ratio }}배</em></span>{% endfor %}
+  </div>
+  {% endif %}
+
+  <h2 class="group-title">📊 업종 대분류 구성</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>업종</th><th>점포</th><th>비중</th><th style="width:34%;">비교</th></tr></thead>
+    <tbody>{% for r in page.bigRows %}<tr><td>{{ r.name }}</td><td>{{ r.n }}곳</td><td>{{ r.share }}</td><td><div class="bar"><span style="width:{{ r.w }}%"></span></div></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+  <h2 class="group-title">🏷️ 세부 업종별 점포 수</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>업종</th><th>점포</th><th>동네 비중</th><th>{{ page.sigungu }} 평균 대비</th></tr></thead>
+    <tbody>{% for r in page.smlRows %}<tr><td>{% if r.url %}<a href="{{ r.url }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %}</td><td>{{ r.n }}곳</td><td>{{ r.share }}</td><td class="{% if r.hot %}chg-up{% endif %}">{{ r.ratio }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.blds.size > 0 %}
+  <h2 class="group-title">🏢 입점 점포가 많은 건물</h2>
+  <ul class="food-list">
+    {% for b in page.blds %}<li class="food-row"><div class="fr-main"><b>{% if b.url %}<a href="{{ b.url }}" style="color:inherit;">{{ b.name }}</a>{% else %}{{ b.name }}{% endif %}</b><small>점포 {{ b.n }}곳</small></div>{% if b.url %}<a class="fr-map" href="{{ b.url }}">입점 업체</a>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if page.midRows.size > 0 %}
+  <h2 class="group-title">📂 업종 중분류 TOP</h2>
+  <div class="chip-row">
+    {% for r in page.midRows %}<span class="chip">{{ r.name }}<em>{{ r.n }}</em></span>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if page.neighbors.size > 0 %}
+  <h2 class="group-title">📍 {{ page.sigungu }}의 다른 동네</h2>
+  <ul class="food-list">
+    {% for t in page.neighbors %}<li class="food-row"><div class="fr-main"><b><a href="{{ t.url }}" style="color:inherit;">{{ t.name }}</a></b><small>점포 {{ t.n }}곳 · {{ t.top }}</small></div><a class="fr-map" href="{{ t.url }}">보기</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% include faq.html %}
+
+  <div class="tip-box">
+    <h2>{{ page.dong }} 창업·입지를 볼 때</h2>
+    <p>점포 수는 경쟁과 상권 규모를 가늠하는 참고 지표입니다. 임대료, 유동인구, 배후 세대수, 실제 매출은 이 자료에 없으니 현장 방문과 별도 상권 조사를 병행하세요.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/sg/{{ page.doShort | uri_escape }}/{{ page.sigungu | uri_escape }}/">{{ page.sigungu }} 상권 →</a> <a href="{{ page.landUrl }}">{{ page.dong }} 상가 매매 시세 →</a> <a href="{{ page.aaptUrl }}">{{ page.dong }} 아파트 실거래가 →</a> <a href="{{ page.hakUrl }}">학군 →</a> <a href="/rank/">상권 랭킹 →</a></p>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

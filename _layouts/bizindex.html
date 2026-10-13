@@ -1,0 +1,100 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    {% if page.home %}<span>업종</span>{% else %}<a href="/biz/">업종</a>
+    <span>›</span>
+    <span>{{ page.sml }}</span>{% endif %}
+  </nav>
+
+  {% if page.home %}
+  <div class="region-page-header">
+    <h1>🏷️ 업종별 점포 수</h1>
+    <p>전국 상가업소 대·중·소분류 · {{ page.period }} 기준</p>
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% for g in page.groups %}
+  <h2 class="group-title">📂 {{ g.name }} <small style="font-weight:500;color:#6B7280;">전국 {{ g.n }}곳</small></h2>
+  {% for m in g.mids %}
+  <p style="margin:10px 0 4px;font-weight:700;font-size:.92rem;color:#374151;">{{ m.name }} <span style="font-weight:500;color:#9CA3AF;">{{ m.n }}</span></p>
+  <div class="chip-row">
+    {% for s in m.smls %}<a class="chip" href="{{ s.url }}">{{ s.name }}<em>{{ s.n }}</em></a>{% endfor %}
+  </div>
+  {% endfor %}
+  {% if forloop.index == 3 %}
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+  {% endif %}
+  {% endfor %}
+
+  {% else %}
+  <div class="region-page-header">
+    <h1>🏷️ 전국 {{ page.sml }} 현황</h1>
+    <p>{{ page.big }} › {{ page.mid }} · 점포 {{ page.n }}곳({{ page.share }}) · {{ page.period }} 기준</p>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <h2 class="group-title">🗺️ 시도별 점포 수</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>시도</th><th>점포</th><th>전국 비중</th></tr></thead>
+    <tbody>{% for r in page.doRows %}<tr><td>{{ r.name }}</td><td>{{ r.n }}곳</td><td>{{ r.share }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+  <h2 class="group-title">🏆 {{ page.smlGa }} 가장 많은 시군구</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>시군구</th><th>점포</th><th>시군구 내 비중</th></tr></thead>
+    <tbody>{% for r in page.topSg %}<tr><td><a href="{{ r.url }}">{{ r.name }}</a></td><td>{{ r.n }}곳</td><td>{{ r.share }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.shareSg.size > 0 %}
+  <h2 class="group-title">📈 비중이 높은 시군구 <small style="font-weight:500;color:#6B7280;">(점포 30곳 이상)</small></h2>
+  <ul class="food-list">
+    {% for r in page.shareSg %}<li class="food-row"><div class="fr-main"><b><a href="{{ r.url }}" style="color:inherit;">{{ r.name }}</a></b><small>점포 {{ r.n }}곳 · 시군구 내 비중 {{ r.share }}</small></div><a class="fr-map" href="{{ r.url }}">보기</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if page.topDong.size > 0 %}
+  <h2 class="group-title">📍 {{ page.smlGa }} 가장 많은 동네</h2>
+  <ul class="food-list">
+    {% for r in page.topDong %}<li class="food-row"><div class="fr-main"><b><a href="{{ r.url }}" style="color:inherit;">{{ r.name }}</a></b><small>{{ page.sml }} {{ r.n }}곳</small></div><a class="fr-map" href="{{ r.url }}">보기</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% include faq.html %}
+
+  <div class="tip-box">
+    <h2>업종 현황을 볼 때</h2>
+    <p>소상공인시장진흥공단 상권업종 분류 기준이며, 같은 가게도 분류에 따라 다른 업종으로 집계될 수 있습니다. 점포 수는 {{ page.period }} 기준입니다.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/biz/">업종 목록 →</a> <a href="/rank/">상권 랭킹 →</a></p>
+  </div>
+  {% endif %}
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

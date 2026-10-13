@@ -1,0 +1,34 @@
+title: 우아상권 - 동네 상권분석·업종별 점포 수
+description: >-
+  우리 동네에 어떤 가게가 몇 곳 있는지 확인하세요. 전국 277만 점포를 법정동·시군구별 업종 구성,
+  유독 많은 특화 업종, 입점 건물별 업체 목록으로 정리했습니다. 창업 전 상권분석 참고 자료입니다.
+url: "https://wooasanggwon.wooahouse.com"
+baseurl: ""
+lang: ko
+timezone: Asia/Seoul
+author: WooaHouse
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+plugins:
+  - jekyll-seo-tag
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - scripts/
+  - data/
+  - "*.py"
+  - "*.log"
+  - README.md
+  - .gitignore
+  - .env
+  - vendor/
+
+# 설계 메모: scripts/process_sbiz.py 가 소상공인시장진흥공단 상가(상권)정보 zip(시도별 CSV, 약 277만 점포)을 스트리밍으로 읽어
+# 법정동·시군구·시군구×업종·입점 건물 단위로 집계해 _rawdata/sb_{시도}.json 을 만든다(점포 개별 페이지는 만들지 않음).
+# _plugins/sbiz_generator.rb 가 동·시군구·시도·업종×시군구·전국 업종·건물·랭킹 페이지를 생성. 사이트맵은 40,000건씩 분할.
+# 자료는 분기 갱신(공공데이터포털 15083033). 갱신은 data/raw 에 새 zip 을 받아 process_sbiz.py → 빌드·배포.

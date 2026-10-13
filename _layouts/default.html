@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.url == '/' %}{{ page.title }}{% elsif page.title %}{{ page.title }} | 우아상권{% else %}우아상권 - 동네 상권분석·업종별 점포 수{% endif %}</title>
+  <meta name="description" content="{% if page.description %}{{ page.description | escape }}{% else %}{{ site.description | strip_newlines | escape }}{% endif %}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+  <meta property="og:type" content="{% if page.layout == 'complex' %}article{% else %}website{% endif %}">
+  <meta property="og:title" content="{% if page.url == '/' %}{{ page.title | escape }}{% elsif page.title %}{{ page.title | escape }} | 우아상권{% else %}우아상권 - 동네 상권분석·업종별 점포 수{% endif %}">
+  <meta property="og:description" content="{% if page.description %}{{ page.description | escape }}{% else %}{{ site.description | strip_newlines | escape }}{% endif %}">
+  <meta property="og:image" content="{{ '/assets/og-image.png' | absolute_url }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:site_name" content="우아상권">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-logo">
+      <span class="logo-icon">🏪</span>
+      <span class="logo-text">우아상권</span>
+    </a>
+    <nav class="header-nav">
+      <a href="{{ '/biz/' | relative_url }}">업종</a>
+      <a href="{{ '/rank/' | relative_url }}">랭킹</a>
+      <a href="{{ '/search/' | relative_url }}">검색</a>
+      <a href="https://wooahouse.com">WooaHouse →</a>
+    </nav>
+  </div>
+</header>
+
+<script src="{{ '/assets/js/wooa-sites-bar.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/ad-dev-placeholder.js' | relative_url }}"></script>
+
+{% unless page.layout == 'dong' or page.layout == 'sg' or page.layout == 'do' or page.layout == 'biz' or page.layout == 'bizindex' or page.layout == 'building' or page.layout == 'rank' or page.url == '/' %}
+<div class="top-ad-bar">
+  {% include ad.html %}
+</div>
+{% endunless %}
+
+<main class="site-main">
+  {{ content }}
+</main>
+<script src="{{ '/assets/js/wooa-sidebar.js' | relative_url }}"></script>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-disclaimer">
+      점포 정보는 소상공인시장진흥공단 '상가(상권)정보'(공공데이터포털, 분기 갱신)를 법정동·시군구·건물 단위로 집계한 것입니다. 조사 시점 이후 개업·폐업·이전한 점포는 반영되지 않을 수 있습니다.<br>
+      업종은 공단의 상권업종 분류(대·중·소분류) 기준이며, 점포 수는 창업·입지 판단을 위한 참고 자료입니다. 임대료·매출·유동인구는 포함하지 않으며 계약 전 현장 확인과 별도 상권 조사를 권장합니다.
+    </p>
+    <p class="footer-links">
+      <a href="https://wooahouse.com">WooaHouse</a> ·
+      <a href="https://wooaapt.wooahouse.com">우아아파트</a> ·
+      <a href="https://wooahakgun.wooahouse.com">우아학군</a> ·
+      <a href="https://wooavilla.wooahouse.com">우아빌라</a> ·
+      <a href="https://wooagongsi.wooahouse.com">우아공시가</a> ·
+      <a href="https://wooaland.wooahouse.com">우아땅값</a> ·
+      <a href="https://wooatown.wooahouse.com">우아동네</a> ·
+      <a href="{{ '/privacy/' | relative_url }}">개인정보처리방침</a>
+    </p>
+    <p class="copyright">&copy; 2026 우아상권 · WooaHouse. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    {% if page.index %}<span>랭킹</span>{% else %}<a href="/rank/">랭킹</a>
+    <span>›</span>
+    <span>{{ page.rankTitle }}</span>{% endif %}
+  </nav>
+
+  {% if page.index %}
+  <div class="region-page-header">
+    <h1>🏆 동네 상권 랭킹</h1>
+    <p>점포·업종이 가장 많은 동네 · {{ page.period }} 기준</p>
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <div class="region-grid">
+    <a href="/rank/all/" class="region-btn"><span class="region-icon">🏪</span>점포가 가장 많은 동<div class="region-count">전국 법정동 TOP 100</div></a>
+    {% for b in page.bigs %}<a href="/rank/{{ b | uri_escape }}/" class="region-btn"><span class="region-icon">🏷️</span>{{ b }}<div class="region-count">{{ b }} 업종이 많은 동 TOP</div></a>
+    {% endfor %}
+  </div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% else %}
+  <div class="region-page-header">
+    <h1>🏆 {{ page.rankTitle }} TOP {{ page.count }} ({{ page.period | slice: 0, 4 }})</h1>
+    <p>전국 법정동 기준 · 점포 30곳 이상 동네</p>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>순위</th><th>동네</th><th>{% if page.key == "all" %}점포{% else %}{{ page.key }} 점포{% endif %}</th>{% if page.key != "all" %}<th>전체 점포</th>{% endif %}<th>주요 업종</th></tr></thead>
+    <tbody>{% for r in page.rows %}<tr><td>{{ r.rank }}</td><td><a href="{{ r.url }}">{{ r.name }}</a></td><td><b>{{ r.n }}곳</b></td>{% if page.key != "all" %}<td>{{ r.total }}곳</td>{% endif %}<td>{{ r.top }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <div class="tip-box">
+    <h2>랭킹을 볼 때</h2>
+    <p>점포 수는 동네 규모(상업지·주거지)에 크게 좌우됩니다. 법정동 경계 기준이며 행정동과 다를 수 있습니다.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/rank/">다른 랭킹 →</a> <a href="/biz/">업종별 보기 →</a></p>
+  </div>
+  {% endif %}
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

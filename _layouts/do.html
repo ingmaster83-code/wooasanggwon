@@ -1,0 +1,45 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <span>{{ page.doShort }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏪 {{ page.doShort }} 상권분석</h1>
+    <p>점포 {{ page.n }}곳 · {{ page.period }} 기준</p>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <h2 class="group-title">📍 시군구별 점포 현황</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>시군구</th><th>점포</th><th>법정동</th><th>주요 업종</th></tr></thead>
+    <tbody>{% for s in page.sgRows %}<tr><td><a href="{{ s.url }}">{{ s.name }}</a></td><td>{{ s.n }}곳</td><td>{{ s.nd }}개</td><td>{{ s.top }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <div class="tip-box">
+    <h2>{{ page.doShort }} 상권 자료 안내</h2>
+    <p>소상공인시장진흥공단 상가업소 자료({{ page.period }})를 시군구·법정동 단위로 집계했습니다. 시군구를 선택하면 동네별 점포 수와 업종 구성, 입점 점포가 많은 건물을 볼 수 있습니다.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/biz/">업종별 보기 →</a> <a href="/rank/">상권 랭킹 →</a></p>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

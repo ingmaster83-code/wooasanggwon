@@ -1,0 +1,107 @@
+---
+layout: default
+title: 우아상권 - 동네 상권분석, 업종별 점포 수와 입점 건물 업체 목록
+description: 우리 동네에 어떤 가게가 몇 곳 있는지 확인하세요. 전국 277만 점포를 법정동·시군구별 업종 구성, 유독 많은 특화 업종, 입점 건물별 업체 목록으로 정리했습니다. 창업 전 상권분석 참고 자료.
+---
+
+<div class="hero">
+  <h1>우아상권 · 🏪 동네 상권분석</h1>
+  <p>동네·업종·건물 이름으로 검색해 보세요 (예: 역삼동, 편의점, 타임스퀘어)</p>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" class="search-input"
+           placeholder="예) 역삼동, 카페, 롯데월드타워..."
+           autocomplete="off" aria-label="동네·업종·건물 검색">
+    <button class="search-btn" onclick="doSearch()">🔍 검색</button>
+  </div>
+</div>
+
+<div class="page-with-sidebar">
+<div>
+<div id="search-results"></div>
+
+<div class="top-ad-bar">
+  {% include ad.html %}
+</div>
+
+<div class="section" style="padding-bottom:0;">
+  <div class="info-box">
+    💡 소상공인시장진흥공단 상가업소 자료({{ site.data.sb_stats.period }})에서 <strong>점포 {{ site.data.sb_stats.stores }}곳</strong>을 법정동 {{ site.data.sb_stats.dong }}곳, 시군구 {{ site.data.sb_stats.sg }}곳, 업종별, 입점 건물 {{ site.data.sb_stats.bld }}곳 단위로 정리했습니다.
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">🏆 점포가 가장 많은 동네</h2>
+  <ul class="food-list">
+    {% for d in site.data.sb_stats.top_dong %}<li class="food-row"><div class="fr-main"><b><a href="{{ d.url }}" style="color:inherit;">{{ d.name }}</a></b><small>점포 {{ d.n }}곳 · {{ d.top }}</small></div><a class="fr-map" href="{{ d.url }}">상권분석</a></li>
+    {% endfor %}
+  </ul>
+  <p class="hub-links" style="margin-top:10px;"><a href="/rank/all/">점포 많은 동네 TOP 100 →</a> <a href="/rank/">업종별 랭킹 →</a></p>
+</div>
+
+<div class="section">
+  <h2 class="section-title">🏷️ 업종별로 찾기</h2>
+  <div class="chip-row">
+    {% for b in site.data.sb_stats.top_biz %}<a class="chip" href="{{ b.url }}">{{ b.name }}<em>{{ b.n }}</em></a>
+    {% endfor %}
+  </div>
+  <p class="hub-links" style="margin-top:10px;"><a href="/biz/">전체 업종 보기 →</a></p>
+</div>
+
+<div class="section">
+  <h2 class="section-title">📍 지역별로 찾기</h2>
+  <div class="region-grid">
+    {% for d in site.data.sb_stats.do_rows %}<a href="/do/{{ d.name | uri_escape }}/" class="region-btn"><span class="region-icon">🏪</span>{{ d.name }}
+      <div class="region-count">점포 {{ d.n }}곳 · {{ d.sg }}개 시군구</div></a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="section">
+  <h2 class="section-title">✅ 상권 자료를 볼 때 알아두세요</h2>
+  <ul style="color:#374151;line-height:1.9;font-size:.93rem;padding-left:22px;">
+    <li>점포 수는 <strong>경쟁과 상권 규모의 참고 지표</strong>입니다. 임대료·유동인구·매출은 이 자료에 없으니 현장 확인이 필요합니다.</li>
+    <li>"특화 업종"은 시군구 평균 대비 비중이 높은 업종입니다. 1.8배 이상이면서 8곳 이상일 때만 표시합니다.</li>
+    <li>분기마다 갱신되는 공공자료라 최근 개업·폐업은 반영되지 않을 수 있습니다.</li>
+  </ul>
+  <p style="margin-top:12px;"><a href="/guide/">상권분석 보는 법 →</a></p>
+</div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>
+
+<script>
+let items = null;
+async function loadIndex() {
+  if (items) return;
+  const resp = await fetch('/search_index.json');
+  items = await resp.json();
+  items.forEach(f => { f.h = (f.n + ' ' + f.l + ' ' + f.t).toLowerCase(); });
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim();
+  const el = document.getElementById('search-results');
+  if (!q) { el.innerHTML = ''; return; }
+  el.innerHTML = '<p style="text-align:center;padding:20px;color:#6B7280;">검색 중...</p>';
+  loadIndex().then(() => {
+    const toks = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const results = [];
+    for (const f of items) {
+      if (toks.every(t => f.h.includes(t))) { results.push(f); if (results.length >= 40) break; }
+    }
+    if (results.length === 0) {
+      el.innerHTML = '<p style="text-align:center;padding:20px;color:#6B7280;">검색 결과가 없습니다.</p>';
+      return;
+    }
+    el.innerHTML = `<div style="max-width:960px;margin:0 auto;padding:0 20px;">
+      <p style="padding:8px 0;font-size:.9rem;color:#6B7280;">"${esc(q)}" 검색 결과 ${results.length}${results.length >= 40 ? '+' : ''}개</p>
+      <ul class="office-list">${results.map(f => `<li><a href="${f.u}"><b>${esc(f.n)}</b><small>${esc(f.t)} · ${esc(f.l)}</small></a></li>`).join('')}</ul>
+    </div>`;
+    el.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+const urlQ = new URLSearchParams(location.search).get('q');
+if (urlQ) { document.getElementById('searchInput').value = urlQ; doSearch(); }
+</script>
