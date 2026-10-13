@@ -37,6 +37,7 @@
     </a>
     <nav class="header-nav">
       <a href="{{ '/biz/' | relative_url }}">업종</a>
+      <a href="{{ '/brand/' | relative_url }}">브랜드</a>
       <a href="{{ '/rank/' | relative_url }}">랭킹</a>
       <a href="{{ '/search/' | relative_url }}">검색</a>
       <a href="https://wooahouse.com">WooaHouse →</a>
@@ -47,7 +48,7 @@
 <script src="{{ '/assets/js/wooa-sites-bar.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/ad-dev-placeholder.js' | relative_url }}"></script>
 
-{% unless page.layout == 'dong' or page.layout == 'sg' or page.layout == 'do' or page.layout == 'biz' or page.layout == 'bizindex' or page.layout == 'building' or page.layout == 'rank' or page.url == '/' %}
+{% unless page.layout == 'dong' or page.layout == 'sg' or page.layout == 'do' or page.layout == 'biz' or page.layout == 'bizindex' or page.layout == 'building' or page.layout == 'rank' or page.layout == 'brand' or page.layout == 'brandsg' or page.layout == 'brandindex' or page.url == '/' %}
 <div class="top-ad-bar">
   {% include ad.html %}
 </div>

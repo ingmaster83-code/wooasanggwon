@@ -48,6 +48,15 @@ description: 우리 동네에 어떤 가게가 몇 곳 있는지 확인하세요
 </div>
 
 <div class="section">
+  <h2 class="section-title">🏪 브랜드별 매장 수</h2>
+  <div class="chip-row">
+    {% for b in site.data.sb_stats.top_brand %}<a class="chip" href="{{ b.url }}">{{ b.name }}<em>{{ b.n }}곳</em></a>
+    {% endfor %}
+  </div>
+  <p class="hub-links" style="margin-top:10px;"><a href="/brand/">브랜드 {{ site.data.sb_stats.brand_n }}개 전체 보기 →</a></p>
+</div>
+
+<div class="section">
   <h2 class="section-title">📍 지역별로 찾기</h2>
   <div class="region-grid">
     {% for d in site.data.sb_stats.do_rows %}<a href="/do/{{ d.name | uri_escape }}/" class="region-btn"><span class="region-icon">🏪</span>{{ d.name }}

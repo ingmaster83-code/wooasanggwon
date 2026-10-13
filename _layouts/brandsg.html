@@ -1,0 +1,68 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/brand/">브랜드</a>
+    <span>›</span>
+    <a href="{{ page.natUrl }}">{{ page.bName }}</a>
+    <span>›</span>
+    <span>{{ page.sigungu }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏷️ {{ page.place }} {{ page.bName }} 매장 현황</h1>
+    <p>{{ page.cat }} · 매장 {{ page.n }}곳 · {{ page.period }} 기준</p>
+  </div>
+
+  <div class="ratio-box">
+    <div class="ratio-num" style="font-size:1.8rem;min-width:130px;">{{ page.n }}<small>곳</small></div>
+    <div class="ratio-txt">
+      <b>{{ page.sigungu }}의 {{ page.bName }}</b>
+      {% if page.catShare %}{{ page.sigungu }} {{ page.cat }} {{ page.catN }}곳 중 {{ page.catShare }} · {% endif %}전국 시군구 평균 {{ page.natAvg }}곳
+    </div>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <h2 class="group-title">📍 동네별 매장 수</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>동네</th><th>매장</th><th>비중</th><th style="width:34%;">비교</th></tr></thead>
+    <tbody>{% for d in page.dongRows %}<tr><td>{% if d.url %}<a href="{{ d.url }}">{{ d.name }}</a>{% else %}{{ d.name }}{% endif %}</td><td>{{ d.n }}곳</td><td>{{ d.share }}</td><td><div class="bar"><span style="width:{{ d.w }}%"></span></div></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.rivals.size > 0 %}
+  <h2 class="group-title">⚔️ {{ page.sigungu }} 같은 업종({{ page.cat }}) 브랜드</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>브랜드</th><th>매장</th><th>{{ page.cat }} 점유율</th></tr></thead>
+    <tbody>{% for r in page.rivals %}<tr><td><a href="{{ r.url }}">{{ r.name }}</a></td><td>{{ r.n }}곳</td><td>{{ r.share }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  {% endif %}
+
+  {% include faq.html %}
+
+  <div class="tip-box">
+    <h2>{{ page.bName }} 매장 현황 안내</h2>
+    <p>상호명으로 브랜드를 식별한 집계라 실제 지점 수와 차이가 있을 수 있습니다. 개별 지점의 위치·영업시간은 브랜드 공식 앱이나 지도 앱에서 확인하세요.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="{{ page.natUrl }}">전국 {{ page.bName }} →</a> <a href="{{ page.sgUrl }}">{{ page.sigungu }} 상권 →</a>{% if page.catUrl %} <a href="{{ page.catUrl }}">{{ page.sigungu }} {{ page.cat }} 현황 →</a>{% endif %} <a href="/brand/">브랜드 목록 →</a></p>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

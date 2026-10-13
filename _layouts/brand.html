@@ -1,0 +1,85 @@
+---
+layout: default
+---
+
+<div class="page-with-sidebar">
+<div class="region-page">
+
+  <nav class="breadcrumb" aria-label="위치">
+    <a href="/">홈</a>
+    <span>›</span>
+    <a href="/brand/">브랜드</a>
+    <span>›</span>
+    <span>{{ page.bName }}</span>
+  </nav>
+
+  <div class="region-page-header">
+    <h1>🏷️ {{ page.bName }} 매장 수 ({{ page.period | slice: 0, 4 }})</h1>
+    <p>{{ page.cat }} · 전국 {{ page.n }}곳 · {{ page.nsg }}개 시군구 · {{ page.period }} 기준</p>
+  </div>
+
+  <div class="ratio-box">
+    <div class="ratio-num" style="font-size:1.8rem;min-width:140px;">{{ page.n }}<small>곳</small></div>
+    <div class="ratio-txt">
+      <b>{{ page.bName }} 전국 매장</b>
+      같은 업종 브랜드 중 {{ page.rank }}위{% if page.catShare %} · {{ page.cat }} 전체 점포의 {{ page.catShare }}{% endif %} · 시군구당 평균 {{ page.perSg }}곳
+    </div>
+  </div>
+
+  <p class="summary-p">{{ page.summary }}</p>
+
+  <div class="info-box">
+    ℹ️ 소상공인시장진흥공단 상가업소 자료({{ page.period }})에서 <b>상호명으로 브랜드를 식별</b>해 집계했습니다. 브랜드 본사가 공시하는 점포 수와 다를 수 있고, 최근 개점·폐점은 반영되지 않을 수 있습니다.
+  </div>
+
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  <h2 class="group-title">🗺️ 시도별 매장 수</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>시도</th><th>매장</th><th>비중</th><th style="width:34%;">비교</th></tr></thead>
+    <tbody>{% for r in page.doRows %}<tr><td>{{ r.name }}</td><td>{{ r.n }}곳</td><td>{{ r.share }}</td><td><div class="bar"><span style="width:{{ r.w }}%"></span></div></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+  <h2 class="group-title">🏆 매장이 많은 시군구 TOP {{ page.sgRows.size }}</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>시군구</th><th>매장</th><th>상세</th></tr></thead>
+    <tbody>{% for r in page.sgRows %}<tr><td>{% if r.url %}<a href="{{ r.url }}">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %}</td><td>{{ r.n }}곳</td><td><a href="{{ r.sgUrl }}">상권 보기</a></td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+
+<!-- ad2 -->
+  <div class="ad-slot">
+    {% include ad.html %}
+  </div>
+
+  {% if page.dongRows.size > 0 %}
+  <h2 class="group-title">📍 매장이 가장 많은 동네</h2>
+  <ul class="food-list">
+    {% for r in page.dongRows %}<li class="food-row"><div class="fr-main"><b>{% if r.url %}<a href="{{ r.url }}" style="color:inherit;">{{ r.name }}</a>{% else %}{{ r.name }}{% endif %}</b><small>{{ page.bName }} {{ r.n }}곳</small></div>{% if r.url %}<a class="fr-map" href="{{ r.url }}">상권분석</a>{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if page.rivals.size > 0 %}
+  <h2 class="group-title">⚔️ 같은 업종({{ page.cat }}) 브랜드 비교</h2>
+  <div class="tbl-wrap"><table class="trade-tbl">
+    <thead><tr><th>브랜드</th><th>전국 매장</th><th>{{ page.cat }} 점유율</th></tr></thead>
+    <tbody>{% for r in page.rivals %}<tr><td><a href="{{ r.url }}">{{ r.name }}</a></td><td>{{ r.n }}곳</td><td>{{ r.share }}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+  {% endif %}
+
+  {% include faq.html %}
+
+  <div class="tip-box">
+    <h2>{{ page.bName }} 창업·입지를 볼 때</h2>
+    <p>매장 수는 브랜드의 확장 규모와 지역별 밀집도를 보는 참고 지표입니다. 가맹 조건과 실제 매출은 공정거래위원회 가맹사업정보제공시스템(franchise.ftc.go.kr)의 정보공개서에서 확인하세요.</p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/brand/">브랜드 목록 →</a>{% if page.catUrl %} <a href="{{ page.catUrl }}">전국 {{ page.cat }} 현황 →</a>{% endif %} <a href="/rank/">상권 랭킹 →</a></p>
+  </div>
+
+</div>
+<aside class="tool-sidebar"></aside>
+</div>

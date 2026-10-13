@@ -56,6 +56,14 @@ layout: default
     {% include ad.html %}
   </div>
 
+  {% if page.brands.size > 0 %}
+  <h2 class="group-title">🏷️ 프랜차이즈 브랜드 매장</h2>
+  <div class="chip-row">
+    {% for b in page.brands %}<a class="chip" href="{{ b.url }}">{{ b.name }}<em>{{ b.n }}곳</em></a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {% if page.blds.size > 0 %}
   <h2 class="group-title">🏢 입점 점포가 많은 건물</h2>
   <ul class="food-list">

@@ -77,7 +77,7 @@ module Jekyll
       bizs = []
       blds = []
       Dir.glob(File.join(dir, 'sb_*.json')).sort.each do |f|
-        next if f.end_with?('sb_meta.json') || f.end_with?('sb_national.json')
+        next if f.end_with?('sb_meta.json') || f.end_with?('sb_national.json') || f.end_with?('sb_brand.json')
         d = JSON.parse(File.read(f, encoding: 'utf-8'))
         dongs.concat(d['dong'])
         sgs.concat(d['sg'])
@@ -85,6 +85,7 @@ module Jekyll
         blds.concat(d['bld'])
       end
       period = "#{meta['period'][0, 4]}.#{meta['period'][4, 2]}"
+      brand_data = JSON.parse(File.read(File.join(dir, 'sb_brand.json'), encoding: 'utf-8'))
       total = meta['stores']
 
       sg_idx = {}
@@ -103,6 +104,7 @@ module Jekyll
       dongs_by_sg = dong_pages.group_by { |d| [d['do'], d['sg']] }
       ctx = { period: period, total: total, sg_idx: sg_idx, nat_sml_n: nat_sml_n, sml_meta: sml_meta, biz_keys: biz_keys, dong_keys: dong_keys, bld_url: bld_url }
 
+      SbizBrand.prepare(brand_data, ctx)
       counts = Hash.new(0)
       dong_pages.each do |d|
         nb = (dongs_by_sg[[d['do'], d['sg']]] || []).reject { |x| x['dong'] == d['dong'] }.sort_by { |x| -x['n'] }.first(12)
@@ -131,6 +133,8 @@ module Jekyll
         counts[:bld] += 1
       end
 
+      brand_index = SbizBrand.generate(site, brand_data, ctx, counts)
+
       # 랭킹
       bigs = dong_pages.flat_map { |d| d['big'].map { |n, _| n } }.uniq.sort
       site.pages << RankPage.new(site, 'all', '점포가 가장 많은 동', dong_pages.sort_by { |d| -d['n'] }.first(100).map { |d| [d, d['n']] }, ctx)
@@ -148,7 +152,9 @@ module Jekyll
         'top_dong' => dong_pages.sort_by { |d| -d['n'] }.first(12).map { |d| { 'name' => "#{d['do']} #{d['sg']} #{d['dong']}", 'url' => "/dong/#{d['do']}/#{d['sg']}/#{d['dong']}/", 'n' => SText.fmt(d['n']), 'top' => d['sml'].first(3).map { |n, _| n }.join('·') } },
         'do_rows' => sgs.group_by { |s| s['do'] }.map { |dd, l| { 'name' => dd, 'n' => SText.fmt(l.sum { |s| s['n'] }), 'sg' => l.size } }.sort_by { |r| r['name'] },
         'top_biz' => nat_sml_n.sort_by { |_, c| -c }.first(24).map { |sml, c| { 'name' => sml, 'url' => "/biz/#{SText.slug(sml)}/", 'n' => SText.fmt(c) } },
-        'bigs' => big_names
+        'bigs' => big_names,
+        'top_brand' => brand_data['brands'].first(18).map { |b| { 'name' => b['name'], 'url' => "/brand/#{SText.slug(b['name'])}/", 'n' => SText.fmt(b['n']), 'cat' => b['cat'] } },
+        'brand_n' => brand_data['brands'].size
       }
       counts[:total] = counts.values.sum
 
@@ -156,6 +162,7 @@ module Jekyll
       dong_pages.each { |d| idx << { 'n' => d['dong'], 't' => '동네 상권', 'l' => "#{d['do']} #{d['sg']}", 'u' => "/dong/#{d['do']}/#{d['sg']}/#{d['dong']}/" } }
       sgs.each { |s| idx << { 'n' => s['sg'], 't' => '시군구 상권', 'l' => s['do'], 'u' => "/sg/#{s['do']}/#{s['sg']}/" } }
       nat_sml_n.each_key { |sml| idx << { 'n' => sml, 't' => '업종', 'l' => '전국', 'u' => "/biz/#{SText.slug(sml)}/" } }
+      brand_index.each { |x| idx << x }
       bld_pages.each { |b| idx << { 'n' => b['name'], 't' => '입점 건물', 'l' => "#{b['do']} #{b['sg']} #{b['dong']}", 'u' => bld_url[[b['do'], b['sg'], b['dong'], b['name']]] } }
       pg = PageWithoutAFile.new(site, site.source, '', 'search_index.json')
       pg.content = JSON.generate(idx)
@@ -224,6 +231,7 @@ module Jekyll
       end
       data['special'] = lq.sort_by { |_, _, r| -r }.first(5).map { |n, c, r| { 'name' => n, 'n' => f(c), 'ratio' => format('%.1f', r) } }
       data['blds'] = d['bld'].map { |n, c| { 'name' => n, 'n' => f(c), 'url' => ctx[:bld_url][[d['do'], d['sg'], d['dong'], n]] } }
+      data['brands'] = SbizBrand.rows(d['brands'] || [], ctx, d['do'], d['sg'])
       data['neighbors'] = neighbors.map { |x| { 'name' => x['dong'], 'url' => "/dong/#{x['do']}/#{x['sg']}/#{x['dong']}/", 'n' => f(x['n']), 'top' => x['sml'].first(2).map { |n, _| n }.join('·') } }
       rank = ctx[:dong_keys].values.select { |x| x['do'] == d['do'] && x['sg'] == d['sg'] }.sort_by { |x| -x['n'] }.index { |x| x['dong'] == d['dong'] }.to_i + 1
       data['rank'] = rank
@@ -275,6 +283,7 @@ module Jekyll
         dk = ctx[:dong_keys][[s['do'], s['sg'], n]]
         { 'name' => n, 'n' => f(c), 'share' => SText.pct(c, s['n']), 'url' => dk ? "/dong/#{s['do']}/#{s['sg']}/#{n}/" : nil, 'top' => dk ? dk['sml'].first(2).map { |x, _| x }.join('·') : '' }
       end
+      data['brands'] = SbizBrand.rows(s['brands'] || [], ctx, s['do'], s['sg'])
       data['blds'] = s['bld'].map { |n, dg, c| { 'name' => n, 'dong' => dg, 'n' => f(c), 'url' => ctx[:bld_url][[s['do'], s['sg'], dg, n]] } }
       data['landUrl'] = "https://wooaland.wooahouse.com/shop/#{s['do']}/#{s['sg']}/"
       data['aaptUrl'] = "https://wooaapt.wooahouse.com/region/#{s['do']}/#{s['sg']}/"
