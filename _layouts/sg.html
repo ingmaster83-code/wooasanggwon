@@ -71,7 +71,7 @@ layout: default
   <div class="tip-box">
     <h2>{{ page.sigungu }} 상권을 볼 때</h2>
     <p>"전국 평균 대비"는 {{ page.sigungu }}에서 해당 업종이 차지하는 비중을 전국 평균 비중으로 나눈 값입니다. 1.4배 이상은 붉게 표시했습니다.</p>
-    <p class="hub-links" style="margin-top:10px;"><a href="/do/{{ page.doShort | uri_escape }}/">{{ page.doShort }} 전체 →</a> <a href="{{ page.landUrl }}">{{ page.sigungu }} 상가 매매 시세 →</a> <a href="{{ page.aaptUrl }}">아파트 실거래가 →</a> <a href="/biz/">업종별 보기 →</a></p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/do/{{ page.doShort | uri_escape }}/">{{ page.doShort }} 전체 →</a> <a href="{{ page.landUrl }}">{{ page.sigungu }} 상가 매매 시세 →</a> <a href="{{ page.aaptUrl }}">아파트 실거래가 →</a> {% assign iskey = page.doShort | append: "|" | append: page.sigungu %}{% assign isg = site.data.ingu_slugs.sg[iskey] %}{% if isg %}<a href="https://wooaingu.wooahouse.com/{{ isg }}/">{{ page.sigungu }} 인구·세대수 →</a> {% endif %}<a href="/biz/">업종별 보기 →</a></p>
   </div>
 
 </div>

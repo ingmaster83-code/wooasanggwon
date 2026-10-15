@@ -92,7 +92,7 @@ layout: default
   <div class="tip-box">
     <h2>{{ page.dong }} 창업·입지를 볼 때</h2>
     <p>점포 수는 경쟁과 상권 규모를 가늠하는 참고 지표입니다. 임대료, 유동인구, 배후 세대수, 실제 매출은 이 자료에 없으니 현장 방문과 별도 상권 조사를 병행하세요.</p>
-    <p class="hub-links" style="margin-top:10px;"><a href="/sg/{{ page.doShort | uri_escape }}/{{ page.sigungu | uri_escape }}/">{{ page.sigungu }} 상권 →</a> <a href="{{ page.landUrl }}">{{ page.dong }} 상가 매매 시세 →</a> <a href="{{ page.aaptUrl }}">{{ page.dong }} 아파트 실거래가 →</a> <a href="{{ page.hakUrl }}">학군 →</a> <a href="/rank/">상권 랭킹 →</a></p>
+    <p class="hub-links" style="margin-top:10px;"><a href="/sg/{{ page.doShort | uri_escape }}/{{ page.sigungu | uri_escape }}/">{{ page.sigungu }} 상권 →</a> <a href="{{ page.landUrl }}">{{ page.dong }} 상가 매매 시세 →</a> <a href="{{ page.aaptUrl }}">{{ page.dong }} 아파트 실거래가 →</a> <a href="{{ page.hakUrl }}">학군 →</a> {% assign ikey = page.doShort | append: "|" | append: page.sigungu | append: "|" | append: page.dong %}{% assign ipath = site.data.ingu_slugs.dong[ikey] %}{% assign iskey = page.doShort | append: "|" | append: page.sigungu %}{% assign isg = site.data.ingu_slugs.sg[iskey] %}{% if ipath %}<a href="https://wooaingu.wooahouse.com/{{ ipath }}/">{{ page.dong }} 인구·세대수 →</a> {% elsif isg %}<a href="https://wooaingu.wooahouse.com/{{ isg }}/">{{ page.sigungu }} 인구·세대수 →</a> {% endif %}<a href="/rank/">상권 랭킹 →</a></p>
   </div>
 
 </div>
